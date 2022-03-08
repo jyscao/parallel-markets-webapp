@@ -110,4 +110,5 @@ if __name__ == "__main__":
     elif parsed_args.remove:
         remove_db()
     else:
-        inspect_table()
+        inspect_table("investor")
+        inspect_table("document")
