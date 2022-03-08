@@ -51,7 +51,7 @@ def init_investor(form_data):
     return Investor(
         firstname    = form_data["firstname"].strip(),
         lastname     = form_data["lastname"].strip(),
-        dob          = datetime.date(*[int(dt) for dt in form_data["dob"].split("-")]),
+        dob          = get_dob_data(form_data["dob"]),
         phone_number = "".join(form_data["phone-num"].split("-")),
 
         addr_street = form_data['address-street'],
@@ -67,6 +67,10 @@ def init_document(f, investor):
         filename = fname,
         investor = investor,
     )
+
+
+def get_dob_data(dob_str):
+    return datetime.date(*[int(dt) for dt in dob_str.split("-")])
 
 
 class Investor(db.Model):
