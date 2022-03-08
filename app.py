@@ -49,8 +49,8 @@ def save_investor_info():
 
 def init_investor(form_data):
     return Investor(
-        firstname    = form_data["firstname"],
-        lastname     = form_data["lastname"],
+        firstname    = form_data["firstname"].strip(),
+        lastname     = form_data["lastname"].strip(),
         dob          = datetime.date(*[int(dt) for dt in form_data["dob"].split("-")]),
         phone_number = "".join(form_data["phone-num"].split("-")),
 
