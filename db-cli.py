@@ -85,13 +85,25 @@ def inspect_table(table_name):
             assert False, "this should never be reached!"
 
         data = con.execute(sql_stmt).fetchall()
-        print("-"*30, table_header, "-"*30)
+
+        print()
+        print("="*30, table_header, "="*30)
+        print(get_table_colnames(con, table_name))
+        print("-"*71)
         for d in data:
             print(d)
         print()
     else:
         print(f"{DB_FILEPATH} does not exist")
         print(f"use -c / --create to first create one, then upload investor info through web app")
+
+
+def get_table_colnames(db_conn, table_name):
+    if table_name == "investor":
+        cols = db_conn.execute("PRAGMA table_info(investor);").fetchall()
+        return list(zip(*cols))[1]
+    elif table_name == "document":
+        return "firstname", "lastname", "filename"
 
 
 if __name__ == "__main__":
