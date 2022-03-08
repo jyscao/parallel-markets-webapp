@@ -35,8 +35,10 @@ def save_investor_info():
         investor = get_investor_if_exists(fdat)
         if investor is None:
             investor = init_investor(fdat)
+            action = "saved"
         else:
             update_existing_investor(investor, fdat)
+            action = "updated"
         db.session.add(investor)
 
         if not os.path.isdir(UPLOAD_FOLDER):
@@ -46,7 +48,7 @@ def save_investor_info():
             db.session.add(doc)
 
         db.session.commit()
-        flask.flash(f"success: investor {fdat['firstname']} {fdat['lastname']} saved", "error")
+        flask.flash(f"success: investor {fdat['firstname']} {fdat['lastname']} {action}", "success")
 
     except ValueError:
         flask.flash("failure: please enter all info in the correct format", "error")
