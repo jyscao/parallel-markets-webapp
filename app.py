@@ -31,42 +31,48 @@ def index():
 def save_investor_info():
     try:
         fdat = flask.request.form
-
-        inv_fullname = f"{fdat['firstname']} {fdat['lastname']}"
-        investor = Investor(
-            fullname     = inv_fullname,
-            dob          = datetime.date(*[int(dt) for dt in fdat["dob"].split("-")]),
-            phone_number = "".join(fdat["phone-num"].split("-")),
-
-            addr_street = fdat['address-street'],
-            addr_state  = fdat['address-state'],
-            addr_zip    = fdat['address-zip'],
-        )
+        investor = init_investor(fdat)
         db.session.add(investor)
 
         if not os.path.isdir(UPLOAD_FOLDER):
             os.mkdir(UPLOAD_FOLDER)
-
         for f in flask.request.files.getlist("files"):
-            fname = secure_filename(f.filename)
-            f.save(os.path.join(app.config['UPLOAD_FOLDER'], fname))
-            document = Document(
-                filename = fname,
-                investor = investor,
-            )
-            db.session.add(document)
+            doc = init_document(f)
+            db.session.add(doc)
 
         db.session.commit()
-
-        flask.flash(f"success: investor {inv_fullname} saved", "error")
+        flask.flash(f"success: investor {fdat['firstname']} {fdat['lastname']} saved", "error")
 
     except ValueError:
         flask.flash("failure: please enter all info in the correct format", "error")
 
 
+def init_investor(form_data):
+    return Investor(
+        firstname    = form_data["firstname"],
+        lastname     = form_data["lastname"],
+        dob          = datetime.date(*[int(dt) for dt in form_data["dob"].split("-")]),
+        phone_number = "".join(form_data["phone-num"].split("-")),
+
+        addr_street = form_data['address-street'],
+        addr_state  = form_data['address-state'],
+        addr_zip    = form_data['address-zip'],
+    )
+
+
+def init_document(f):
+    fname = secure_filename(f.filename)
+    f.save(os.path.join(app.config['UPLOAD_FOLDER'], fname))
+    return Document(
+        filename = fname,
+        investor = investor,
+    )
+
+
 class Investor(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    fullname = db.Column(db.String(128), nullable=False)
+    firstname = db.Column(db.String(64), nullable=False)
+    lastname = db.Column(db.String(64), nullable=False)
     dob = db.Column(db.Date, nullable=False)
     phone_number = db.Column(db.String(10), nullable=False)
 
