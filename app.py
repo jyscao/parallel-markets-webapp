@@ -31,7 +31,12 @@ def index():
 def save_investor_info():
     try:
         fdat = flask.request.form
-        investor = init_investor(fdat)
+
+        investor = get_investor_if_exists(fdat)
+        if investor is None:
+            investor = init_investor(fdat)
+        else:
+            update_existing_investor(investor, fdat)
         db.session.add(investor)
 
         if not os.path.isdir(UPLOAD_FOLDER):
@@ -67,6 +72,19 @@ def init_document(f, investor):
         filename = fname,
         investor = investor,
     )
+
+
+def get_investor_if_exists(form_data):
+    fname, lname, dob = form_data["firstname"], form_data["lastname"], get_dob_data(form_data["dob"])
+    # determine if user exists in DB by filtering by full name & date of birth
+    return Investor.query.filter(Investor.firstname == fname, Investor.lastname == lname, Investor.dob == dob).first()
+
+
+def update_existing_investor(investor, form_data):
+    investor.phone_number = "".join(form_data["phone-num"].split("-"))
+    investor.addr_street  = form_data['address-street']
+    investor.addr_state   = form_data['address-state']
+    investor.addr_zip     = form_data['address-zip']
 
 
 def get_dob_data(dob_str):
