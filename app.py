@@ -37,7 +37,7 @@ def save_investor_info():
         if not os.path.isdir(UPLOAD_FOLDER):
             os.mkdir(UPLOAD_FOLDER)
         for f in flask.request.files.getlist("files"):
-            doc = init_document(f)
+            doc = init_document(f, investor)
             db.session.add(doc)
 
         db.session.commit()
@@ -60,7 +60,7 @@ def init_investor(form_data):
     )
 
 
-def init_document(f):
+def init_document(f, investor):
     fname = secure_filename(f.filename)
     f.save(os.path.join(app.config['UPLOAD_FOLDER'], fname))
     return Document(

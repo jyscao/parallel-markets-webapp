@@ -79,7 +79,7 @@ def inspect_table(table_name):
             sql_stmt = "SELECT * from investor;"
             table_header = "Investors"
         elif table_name == "document":
-            sql_stmt = "SELECT i.fullname, d.filename from investor i INNER JOIN document d ON i.id=d.investor_id;"
+            sql_stmt = "SELECT i.firstname, i.lastname, d.filename from investor i INNER JOIN document d ON i.id=d.investor_id;"
             table_header = "Documents"
         else:
             assert False, "this should never be reached!"
