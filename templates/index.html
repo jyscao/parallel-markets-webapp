@@ -1,0 +1,63 @@
+<!doctype html>
+
+<title>Parallel Markets</title>
+
+<h1>Parallel Markets Investor Intake</h1>
+<p1><b>Enter investor information:</b></p>
+
+</div>
+  <form method="POST" enctype=multipart/form-data>
+    <label for="firstname">First Name:</label>
+    <input name="firstname" id="firstname" placeholder="John" required>
+
+    <label for="lastname">Last Name:</label>
+    <input name="lastname" id="lastname" placeholder="Smith" required>
+
+    <br>
+    <br>
+
+    <label for="dob">Date of Birth:</label>
+    <input name="dob" id="dob" placeholder="2002-02-22" required>
+
+    <br>
+    <br>
+
+    <label for="phone-num">Phone Number:</label>
+    <input name="phone-num" id="phone-num" placeholder="123-456-7890" required>
+
+    <br>
+    <br>
+
+    <label for="address-street">Stree Address:</label>
+    <input name="address-street" id="address-street" placeholder="100 Main St." required>
+
+    <label for="address-state">State:</label>
+    <input name="address-state" id="address-state" placeholder="NY" required>
+
+    <label for="address-zip">Zip Code:</label>
+    <input name="address-zip" id="address-zip" placeholder="01234" required>
+
+    <br>
+    <br>
+
+    <label for="files">upload supporting document(s):</label>
+    <br>
+    <input type="file" id="files" name="files" multiple required>
+
+    <br>
+    <br>
+
+    <input type="submit" value="Save">
+  </form>
+</div>
+
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    <div class=flashes>
+    {% for cat, msg in messages %}
+        <span class="{{cat}}">{{ msg }}</span>
+    {% endfor %}
+    </div>
+  {% endif %}
+{% endwith %}
