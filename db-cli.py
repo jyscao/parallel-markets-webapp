@@ -79,7 +79,7 @@ def inspect_table(table_name):
             sql_stmt = "SELECT * from investor;"
             table_header = "Investors"
         elif table_name == "document":
-            sql_stmt = "SELECT i.firstname, i.lastname, d.filename from investor i INNER JOIN document d ON i.id=d.investor_id;"
+            sql_stmt = "SELECT i.id, i.firstname, i.lastname, d.filename from investor i INNER JOIN document d ON i.id=d.investor_id;"
             table_header = "Documents"
         else:
             assert False, "this should never be reached!"
@@ -103,7 +103,7 @@ def get_table_colnames(db_conn, table_name):
         cols = db_conn.execute("PRAGMA table_info(investor);").fetchall()
         return list(zip(*cols))[1]
     elif table_name == "document":
-        return "firstname", "lastname", "filename"
+        return "investor_id", "firstname", "lastname", "filename"
 
 
 if __name__ == "__main__":
